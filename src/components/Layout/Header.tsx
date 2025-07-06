@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Bell, Search, User, Menu, MessageCircle, Sparkles } from 'lucide-react';
+import { Bell, Search, User, Menu, MessageCircle } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
@@ -31,15 +31,14 @@ const Header = () => {
               <Menu className="h-5 w-5" />
             </Button>
             
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-lg flex items-center justify-center shadow-lg">
-                <Sparkles className="h-5 w-5 text-white" />
-              </div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-600 via-red-500 to-pink-500 bg-clip-text text-transparent">
-                #AfriOffres
-              </h1>
+            <div className="flex items-center space-x-3">
+              <img 
+                src="http://googleusercontent.com/image_generation_content/2" 
+                alt="AfriOffres Logo" 
+                className="h-10 w-auto object-contain"
+              />
               {user?.role === 'premium' && (
-                <Badge className="bg-gradient-to-r from-gold-400 to-yellow-500 text-white text-xs px-2 py-1">
+                <Badge className="bg-gradient-to-r from-gold-400 to-yellow-500 text-white text-xs px-2 py-1 ml-2">
                   PRO
                 </Badge>
               )}
@@ -91,7 +90,7 @@ const Header = () => {
                   <p className="text-sm font-medium text-gray-900">{user?.name}</p>
                   <p className="text-xs text-gray-500 capitalize flex items-center gap-1">
                     {user?.role}
-                    {user?.role === 'premium' && <Sparkles className="h-3 w-3 text-yellow-500" />}
+                    {user?.role === 'premium' && <span className="text-yellow-500">★</span>}
                   </p>
                 </div>
                 <div className="relative">
