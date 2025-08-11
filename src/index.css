@@ -18,24 +18,41 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    /* Medina branding colors - blue and teal palette */
+    --primary: 210 100% 40%;
     --primary-foreground: 210 40% 98%;
+    --primary-light: 210 100% 60%;
+    --primary-dark: 210 100% 25%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 195 100% 96.1%;
+    --secondary-foreground: 210 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 180 100% 40%;
+    --accent-foreground: 210 40% 98%;
+    --accent-light: 180 100% 60%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 210 100% 40%;
+
+    /* Success and warning colors for analytics */
+    --success: 142 76% 36%;
+    --success-foreground: 142 76% 90%;
+    --warning: 48 96% 53%;
+    --warning-foreground: 48 96% 15%;
+
+    /* Chart colors for competitive analysis */
+    --chart-1: 210 100% 40%;
+    --chart-2: 180 100% 40%;
+    --chart-3: 160 100% 40%;
+    --chart-4: 240 100% 40%;
+    --chart-5: 280 100% 40%;
 
     --radius: 0.5rem;
 
@@ -95,7 +112,7 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
-    background: linear-gradient(135deg, #fafafa 0%, #f8f9fa 100%);
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   }
 }
 
@@ -114,10 +131,22 @@ All colors MUST be HSL.
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, #f97316, #dc2626, #ec4899);
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light)));
+  }
+
+  .gradient-accent {
+    background: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent-light)));
+  }
+
+  .shadow-competitive {
+    box-shadow: 0 4px 20px -2px hsl(var(--primary) / 0.1);
   }
 }
 
@@ -140,10 +169,10 @@ All colors MUST be HSL.
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #f97316, #dc2626);
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #ea580c, #b91c1c);
+  background: linear-gradient(135deg, hsl(var(--primary-dark)), hsl(var(--accent)));
 }

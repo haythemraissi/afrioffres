@@ -43,7 +43,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           realTime: true,
         }
       },
-      keywords: ['construction', 'IT', 'consulting']
+      keywords: ['booking', 'travel', 'tourism']
     };
 
     login(mockUser);

@@ -1,20 +1,35 @@
-
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-export interface Tender {
+export interface CompetitorData {
   id: string;
-  title: string;
-  organization: string;
+  name: string;
+  type: 'booking' | 'tunisie-booking' | 'traveltodo' | 'other';
+  lastUpdated: string;
+  metrics: {
+    averagePrice: number;
+    totalOffers: number;
+    priceChange: number; // Percentage change
+    marketShare: number;
+  };
+  recentActivity: {
+    priceChanges: Array<{
+      product: string;
+      oldPrice: number;
+      newPrice: number;
+      changePercent: number;
+      date: string;
+    }>;
+    promotions: Array<{
+      title: string;
+      discount: number;
+      validUntil: string;
+      products: string[];
+    }>;
+  };
+  website: string;
   country: string;
-  sector: string;
-  deadline: string;
-  status: 'open' | 'closed' | 'awarded';
-  budget: string;
-  description: string;
-  requirements: string[];
-  publishedDate: string;
-  category: string;
+  status: 'active' | 'monitoring' | 'inactive';
 }
 
 interface User {
@@ -24,7 +39,7 @@ interface User {
   role: 'admin' | 'free' | 'premium';
   preferences: {
     countries: string[];
-    sectors: string[];
+    types: string[];
     notifications: {
       email: boolean;
       whatsapp: boolean;
@@ -38,21 +53,10 @@ interface Notification {
   id: string;
   title: string;
   message: string;
-  type: 'tender' | 'update' | 'deadline' | 'system';
+  type: 'price-change' | 'promotion' | 'anomaly' | 'system';
   timestamp: string;
   read: boolean;
-}
-
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  duration: string;
-  country: string;
-  theme: string;
-  videoUrl: string;
-  thumbnail: string;
-  level: 'beginner' | 'intermediate' | 'advanced';
+  severity?: 'low' | 'medium' | 'high';
 }
 
 interface StoreState {
@@ -60,15 +64,15 @@ interface StoreState {
   user: User | null;
   isAuthenticated: boolean;
   
-  // Tenders state
-  tenders: Tender[];
-  filteredTenders: Tender[];
+  // Competitive Intelligence state
+  competitors: CompetitorData[];
+  filteredCompetitors: CompetitorData[];
   searchQuery: string;
   filters: {
     countries: string[];
-    sectors: string[];
+    types: string[];
     status: string[];
-    organizations: string[];
+    dateLimit: string;
   };
   
   // AI Assistant state
@@ -80,9 +84,25 @@ interface StoreState {
   notifications: Notification[];
   unreadCount: number;
   
-  // E-learning state
-  courses: Course[];
-  filteredCourses: Course[];
+  // Analytics state
+  analyticsData: {
+    priceEvolution: Array<{
+      date: string;
+      competitors: Record<string, number>;
+    }>;
+    marketShare: Array<{
+      name: string;
+      share: number;
+      color: string;
+    }>;
+    anomalies: Array<{
+      competitor: string;
+      product: string;
+      change: number;
+      severity: 'low' | 'medium' | 'high';
+      date: string;
+    }>;
+  };
   
   // UI state
   sidebarOpen: boolean;
@@ -92,17 +112,16 @@ interface StoreState {
   // Actions
   login: (user: User) => void;
   logout: () => void;
-  setTenders: (tenders: Tender[]) => void;
+  setCompetitors: (competitors: CompetitorData[]) => void;
   setSearchQuery: (query: string) => void;
   setFilters: (filters: Partial<StoreState['filters']>) => void;
-  filterTenders: () => void;
+  filterCompetitors: () => void;
   addChatMessage: (sender: 'user' | 'ai', message: string) => void;
   setAiProcessing: (processing: boolean) => void;
   setUploadedDocument: (file: File | null) => void;
-  addNotification: (notification: Omit<Notification, 'id' | 'timestamp'>) => void;
+  addNotification: (notification: Omit<Notification, 'id' | 'timestamp' | 'read'>) => void;
   markNotificationRead: (id: string) => void;
-  setCourses: (courses: Course[]) => void;
-  filterCourses: (theme?: string, country?: string) => void;
+  setAnalyticsData: (data: Partial<StoreState['analyticsData']>) => void;
   setSidebarOpen: (open: boolean) => void;
   setChatbotOpen: (open: boolean) => void;
   setCurrentPage: (page: string) => void;
@@ -114,22 +133,25 @@ export const useStore = create<StoreState>()(
       // Initial state
       user: null,
       isAuthenticated: false,
-      tenders: [],
-      filteredTenders: [],
+      competitors: [],
+      filteredCompetitors: [],
       searchQuery: '',
       filters: {
         countries: [],
-        sectors: [],
+        types: [],
         status: [],
-        organizations: [],
+        dateLimit: '',
       },
       chatMessages: [],
       isAiProcessing: false,
       uploadedDocument: null,
       notifications: [],
       unreadCount: 0,
-      courses: [],
-      filteredCourses: [],
+      analyticsData: {
+        priceEvolution: [],
+        marketShare: [],
+        anomalies: [],
+      },
       sidebarOpen: true,
       chatbotOpen: false,
       currentPage: 'dashboard',
@@ -138,50 +160,46 @@ export const useStore = create<StoreState>()(
       login: (user) => set({ user, isAuthenticated: true }),
       logout: () => set({ user: null, isAuthenticated: false }),
       
-      setTenders: (tenders) => {
-        set({ tenders, filteredTenders: tenders });
-        get().filterTenders();
+      setCompetitors: (competitors) => {
+        set({ competitors, filteredCompetitors: competitors });
+        get().filterCompetitors();
       },
       
       setSearchQuery: (searchQuery) => {
         set({ searchQuery });
-        get().filterTenders();
+        get().filterCompetitors();
       },
       
       setFilters: (newFilters) => {
         set({ filters: { ...get().filters, ...newFilters } });
-        get().filterTenders();
+        get().filterCompetitors();
       },
       
-      filterTenders: () => {
-        const { tenders, searchQuery, filters } = get();
-        let filtered = tenders;
+      filterCompetitors: () => {
+        const { competitors, searchQuery, filters } = get();
+        let filtered = competitors;
         
         if (searchQuery) {
-          filtered = filtered.filter(tender =>
-            tender.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            tender.organization.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            tender.description.toLowerCase().includes(searchQuery.toLowerCase())
+          filtered = filtered.filter(competitor =>
+            competitor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            competitor.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            competitor.website.toLowerCase().includes(searchQuery.toLowerCase())
           );
         }
         
         if (filters.countries.length > 0) {
-          filtered = filtered.filter(tender => filters.countries.includes(tender.country));
+          filtered = filtered.filter(competitor => filters.countries.includes(competitor.country));
         }
         
-        if (filters.sectors.length > 0) {
-          filtered = filtered.filter(tender => filters.sectors.includes(tender.sector));
+        if (filters.types.length > 0) {
+          filtered = filtered.filter(competitor => filters.types.includes(competitor.type));
         }
         
         if (filters.status.length > 0) {
-          filtered = filtered.filter(tender => filters.status.includes(tender.status));
+          filtered = filtered.filter(competitor => filters.status.includes(competitor.status));
         }
         
-        if (filters.organizations.length > 0) {
-          filtered = filtered.filter(tender => filters.organizations.includes(tender.organization));
-        }
-        
-        set({ filteredTenders: filtered });
+        set({ filteredCompetitors: filtered });
       },
       
       addChatMessage: (sender, message) => {
@@ -218,26 +236,14 @@ export const useStore = create<StoreState>()(
         set({ notifications, unreadCount });
       },
       
-      setCourses: (courses) => set({ courses, filteredCourses: courses }),
-      
-      filterCourses: (theme, country) => {
-        let filtered = get().courses;
-        
-        if (theme) {
-          filtered = filtered.filter(course => course.theme === theme);
-        }
-        
-        if (country) {
-          filtered = filtered.filter(course => course.country === country);
-        }
-        
-        set({ filteredCourses: filtered });
+      setAnalyticsData: (data) => {
+        set({ analyticsData: { ...get().analyticsData, ...data } });
       },
       
       setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
       setChatbotOpen: (chatbotOpen) => set({ chatbotOpen }),
       setCurrentPage: (currentPage) => set({ currentPage }),
     }),
-    { name: 'afrioffres-store' }
+    { name: 'medina-store' }
   )
 );

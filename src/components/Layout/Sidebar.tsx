@@ -18,10 +18,10 @@ const Sidebar = () => {
 
   const menuItems = [
     { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard },
-    { id: 'tenders', label: 'Appels d\'offres', icon: FileText },
+    { id: 'competitors', label: 'Analyses concurrentielles', icon: FileText },
     { id: 'ai-assistant', label: 'Assistant IA', icon: Bot },
-    { id: 'notifications', label: 'Notifications', icon: Bell },
-    { id: 'learning', label: 'E-learning', icon: GraduationCap },
+    { id: 'notifications', label: 'Alertes', icon: Bell },
+    { id: 'analytics', label: 'Statistiques', icon: GraduationCap },
     { id: 'settings', label: 'Paramètres', icon: Settings },
   ];
 
@@ -71,10 +71,10 @@ const Sidebar = () => {
                 <Button
                   key={item.id}
                   variant={currentPage === item.id ? "default" : "ghost"}
-                  className={cn(
-                    "w-full justify-start h-12 px-4",
-                    currentPage === item.id && "bg-gradient-to-r from-orange-500 to-red-500 text-white"
-                  )}
+                   className={cn(
+                     "w-full justify-start h-12 px-4",
+                     currentPage === item.id && "gradient-primary text-white"
+                   )}
                   onClick={() => handleMenuClick(item.id)}
                 >
                   <Icon className="h-5 w-5 mr-3" />
@@ -86,15 +86,15 @@ const Sidebar = () => {
 
           {/* Footer */}
           <div className="p-4 border-t border-gray-200">
-            <div className="bg-gradient-to-r from-green-500 to-teal-500 rounded-lg p-4 text-white">
+            <div className="gradient-accent rounded-lg p-4 text-white">
               <h3 className="font-semibold text-sm">Passez au Premium</h3>
               <p className="text-xs opacity-90 mt-1">
-                Accédez aux recommandations IA et plus encore
+                Accédez aux analyses avancées et alertes en temps réel
               </p>
               <Button 
                 variant="secondary" 
                 size="sm" 
-                className="mt-2 w-full bg-white text-green-600 hover:bg-gray-100"
+                className="mt-2 w-full bg-white text-accent hover:bg-gray-100"
               >
                 Découvrir
               </Button>

@@ -32,13 +32,14 @@ const Header = () => {
             </Button>
             
             <div className="flex items-center space-x-3">
-              <img 
-                src="http://googleusercontent.com/image_generation_content/2" 
-                alt="AfriOffres Logo" 
-                className="h-10 w-auto object-contain"
-              />
+              <div className="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-lg">M</span>
+              </div>
+              <h1 className="text-2xl font-bold text-gradient">
+                Medina
+              </h1>
               {user?.role === 'premium' && (
-                <Badge className="bg-gradient-to-r from-gold-400 to-yellow-500 text-white text-xs px-2 py-1 ml-2">
+                <Badge className="gradient-accent text-white text-xs px-2 py-1 ml-2">
                   PRO
                 </Badge>
               )}
