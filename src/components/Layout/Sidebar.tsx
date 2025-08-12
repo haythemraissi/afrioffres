@@ -18,6 +18,7 @@ const Sidebar = () => {
 
   const menuItems = [
     { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard },
+    { id: 'hotels', label: 'Hôtels', icon: FileText },
     { id: 'competitors', label: 'Analyses concurrentielles', icon: FileText },
     { id: 'ai-assistant', label: 'Assistant IA', icon: Bot },
     { id: 'notifications', label: 'Alertes', icon: Bell },

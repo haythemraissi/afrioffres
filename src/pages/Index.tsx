@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useStore } from '../store/useStore';
+import Header from '../components/Layout/Header';
+import Sidebar from '../components/Layout/Sidebar';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import CompetitorCard from '../components/Competitors/CompetitorCard';
@@ -7,10 +9,15 @@ import SearchFilters from '../components/Competitors/SearchFilters';
 import HotelCard from '../components/Hotels/HotelCard';
 import HotelSearchFilters from '../components/Hotels/HotelSearchFilters';
 import RecommendationsSection from '../components/Dashboard/RecommendationsSection';
+import AIAssistant from '../components/AIAssistant/AIAssistant';
+import Chatbot from '../components/Chatbot/Chatbot';
+import AuthModal from '../components/Auth/AuthModal';
 
 const Index = () => {
   const { 
-    isAuthenticated, 
+    currentPage,
+    isAuthenticated,
+    addNotification,
     competitors, 
     filteredCompetitors, 
     setCompetitors,
@@ -18,6 +25,8 @@ const Index = () => {
     filteredHotels,
     setHotels
   } = useStore();
+
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
     // Mock data for competitors
@@ -252,196 +261,250 @@ const Index = () => {
     ];
 
     setHotels(mockHotels);
-  }, [setCompetitors, setHotels]);
+
+    // Add sample notifications
+    addNotification({
+      title: 'Alerte prix hôtel',
+      message: 'Four Seasons Tunis a augmenté ses prix de 8.2%',
+      type: 'price-change',
+      severity: 'medium',
+    });
+
+    addNotification({
+      title: 'Nouvelle promotion',
+      message: 'Tunisie Booking lance une offre Ramadan avec -25%',
+      type: 'promotion',
+      severity: 'low',
+    });
+  }, [setCompetitors, setHotels, addNotification]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      const timer = setTimeout(() => {
+        setShowAuthModal(true);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isAuthenticated]);
+
+  const renderCurrentPage = () => {
+    switch (currentPage) {
+      case 'dashboard':
+        return (
+          <div className="space-y-6">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-competitive via-red-500 to-pink-500 bg-clip-text text-transparent mb-4">
+                Dashboard - Intelligence Concurrentielle Hôtelière
+              </h1>
+              <p className="text-gray-600 text-lg max-w-3xl mx-auto">
+                Surveillez vos concurrents hôteliers et comparez les prix en temps réel
+              </p>
+            </div>
+
+            {/* Tabs for different views */}
+            <Tabs defaultValue="hotels" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-6">
+                <TabsTrigger value="hotels">Comparaison Hôtels</TabsTrigger>
+                <TabsTrigger value="competitors">Analyse Concurrents</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="hotels" className="space-y-6">
+                <HotelSearchFilters />
+                
+                {/* Stats Cards for Hotels */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                  <Card className="border-l-4 border-l-competitive">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-gray-600">Total Hôtels</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold text-gray-900">{hotels.length}</div>
+                      <p className="text-xs text-gray-500 mt-1">Dans la base</p>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-l-4 border-l-green-500">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-gray-600">Disponibles</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold text-gray-900">{hotels.filter(h => h.availability).length}</div>
+                      <p className="text-xs text-gray-500 mt-1">Réservables</p>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-l-4 border-l-yellow-500">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-gray-600">Prix Moyen</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold text-gray-900">
+                        {Math.round(hotels.reduce((acc, h) => acc + h.pricePerNight, 0) / hotels.length || 0)} TND
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">Par nuit</p>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-l-4 border-l-blue-500">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-gray-600">Note Moyenne</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold text-gray-900">
+                        {(hotels.reduce((acc, h) => acc + h.reviews.rating, 0) / hotels.length || 0).toFixed(1)}
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">Sur 5 étoiles</p>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {filteredHotels.map((hotel) => (
+                    <HotelCard key={hotel.id} hotel={hotel} />
+                  ))}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="competitors" className="space-y-6">
+                <SearchFilters />
+                
+                {/* Stats Cards for Competitors */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                  <Card className="border-l-4 border-l-competitive">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-gray-600">Total Concurrents</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold text-gray-900">{competitors.length}</div>
+                      <p className="text-xs text-gray-500 mt-1">Surveillés activement</p>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-l-4 border-l-green-500">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-gray-600">Concurrents Actifs</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold text-gray-900">{competitors.filter(c => c.status === 'active').length}</div>
+                      <p className="text-xs text-gray-500 mt-1">En temps réel</p>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-l-4 border-l-yellow-500">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-gray-600">Changements Prix</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold text-gray-900">24</div>
+                      <p className="text-xs text-gray-500 mt-1">Dernières 24h</p>
+                    </CardContent>
+                  </Card>
+                  <Card className="border-l-4 border-l-blue-500">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-gray-600">Alertes Actives</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold text-gray-900">7</div>
+                      <p className="text-xs text-gray-500 mt-1">Nécessitent action</p>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {filteredCompetitors.map((competitor) => (
+                    <CompetitorCard key={competitor.id} competitor={competitor} />
+                  ))}
+                </div>
+
+                <RecommendationsSection />
+              </TabsContent>
+            </Tabs>
+          </div>
+        );
+
+      case 'competitors':
+        return (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-3xl font-bold text-gray-900">Analyses concurrentielles</h2>
+            </div>
+            <SearchFilters />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredCompetitors.map((competitor) => (
+                <CompetitorCard key={competitor.id} competitor={competitor} />
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'hotels':
+        return (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-3xl font-bold text-gray-900">Comparaison d'hôtels</h2>
+            </div>
+            <HotelSearchFilters />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredHotels.map((hotel) => (
+                <HotelCard key={hotel.id} hotel={hotel} />
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'ai-assistant':
+        return <AIAssistant />;
+
+      case 'notifications':
+        return (
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold text-gray-900">Alertes et notifications</h2>
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <p className="text-gray-600">Gestion des alertes en temps réel pour les changements concurrentiels</p>
+            </div>
+          </div>
+        );
+
+      case 'analytics':
+        return (
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold text-gray-900">Statistiques et analyses</h2>
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <p className="text-gray-600">Graphiques et analyses détaillées de la concurrence</p>
+            </div>
+          </div>
+        );
+
+      case 'settings':
+        return (
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold text-gray-900">Paramètres</h2>
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <p className="text-gray-600">Configuration de la plateforme</p>
+            </div>
+          </div>
+        );
+
+      default:
+        return (
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold text-gray-900">Tableau de bord</h2>
+            <RecommendationsSection />
+          </div>
+        );
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto p-6">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-competitive via-red-500 to-pink-500 bg-clip-text text-transparent mb-4">
-            Medina - Intelligence Concurrentielle Hôtelière
-          </h1>
-          <p className="text-gray-600 text-lg max-w-3xl mx-auto">
-            Comparez les hôtels et surveillez vos concurrents en temps réel pour prendre des décisions stratégiques
-          </p>
-        </div>
-
-        {/* Tabs for different views */}
-        <Tabs defaultValue="hotels" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="hotels">Comparaison Hôtels</TabsTrigger>
-            <TabsTrigger value="competitors">Analyse Concurrents</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="hotels" className="space-y-6">
-            {/* Hotel Search & Filters */}
-            <HotelSearchFilters />
-
-            {/* Stats Cards for Hotels */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <Card className="border-l-4 border-l-competitive">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">
-                    Total Hôtels
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-gray-900">
-                    {hotels.length}
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Dans la base
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-l-4 border-l-green-500">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">
-                    Disponibles
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-gray-900">
-                    {hotels.filter(h => h.availability).length}
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Réservables
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-l-4 border-l-yellow-500">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">
-                    Prix Moyen
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-gray-900">
-                    {Math.round(hotels.reduce((acc, h) => acc + h.pricePerNight, 0) / hotels.length || 0)} TND
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Par nuit
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-l-4 border-l-blue-500">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">
-                    Note Moyenne
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-gray-900">
-                    {(hotels.reduce((acc, h) => acc + h.reviews.rating, 0) / hotels.length || 0).toFixed(1)}
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Sur 5 étoiles
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Hotels Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {filteredHotels.map((hotel) => (
-                <HotelCard 
-                  key={hotel.id} 
-                  hotel={hotel} 
-                />
-              ))}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="competitors" className="space-y-6">
-            {/* Competitor Search & Filters */}
-            <SearchFilters />
-
-            {/* Stats Cards for Competitors */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <Card className="border-l-4 border-l-competitive">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">
-                    Total Concurrents
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-gray-900">
-                    {competitors.length}
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Surveillés activement
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-l-4 border-l-green-500">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">
-                    Concurrents Actifs
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-gray-900">
-                    {competitors.filter(c => c.status === 'active').length}
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    En temps réel
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-l-4 border-l-yellow-500">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">
-                    Changements Prix
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-gray-900">
-                    24
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Dernières 24h
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="border-l-4 border-l-blue-500">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-600">
-                    Alertes Actives
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-gray-900">
-                    7
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Nécessitent action
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Competitors Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {filteredCompetitors.map((competitor) => (
-                <CompetitorCard 
-                  key={competitor.id} 
-                  competitor={competitor} 
-                />
-              ))}
-            </div>
-
-            {/* Recommendations */}
-            <RecommendationsSection />
-          </TabsContent>
-        </Tabs>
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      <div className="flex">
+        <Sidebar />
+        <main className="flex-1 lg:ml-0 p-6">
+          {renderCurrentPage()}
+        </main>
       </div>
+      <Chatbot />
+      {showAuthModal && (
+        <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      )}
     </div>
   );
 };
