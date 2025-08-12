@@ -36,7 +36,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       role: 'premium' as const,
       preferences: {
         countries: ['Côte d\'Ivoire', 'Sénégal'],
-        sectors: ['Infrastructure', 'Technologie'],
+        types: ['booking', 'travel'],
         notifications: {
           email: true,
           whatsapp: false,
