@@ -26,7 +26,7 @@ const Header = () => {
               variant="ghost"
               size="sm"
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="lg:hidden hover:bg-orange-50 transition-colors"
+              className="lg:hidden hover:bg-blue-50 transition-colors"
             >
               <Menu className="h-5 w-5" />
             </Button>
@@ -53,7 +53,7 @@ const Header = () => {
               <input
                 type="text"
                 placeholder="Recherche rapide..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-full bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-full bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200"
               />
             </div>
           </div>
@@ -65,15 +65,15 @@ const Header = () => {
               variant="ghost"
               size="sm"
               onClick={() => setChatbotOpen(true)}
-              className="relative hover:bg-orange-50 transition-colors group"
+              className="relative hover:bg-blue-50 transition-colors group"
             >
-              <MessageCircle className="h-5 w-5 group-hover:text-orange-600 transition-colors" />
+              <MessageCircle className="h-5 w-5 group-hover:text-primary transition-colors" />
               <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
             </Button>
 
             {/* Notifications */}
-            <Button variant="ghost" size="sm" className="relative hover:bg-orange-50 transition-colors group">
-              <Bell className="h-5 w-5 group-hover:text-orange-600 transition-colors" />
+            <Button variant="ghost" size="sm" className="relative hover:bg-blue-50 transition-colors group">
+              <Bell className="h-5 w-5 group-hover:text-primary transition-colors" />
               {unreadCount > 0 && (
                 <Badge 
                   variant="destructive" 
@@ -99,19 +99,19 @@ const Header = () => {
                     variant="ghost"
                     size="sm"
                     onClick={logout}
-                    className="flex items-center space-x-2 hover:bg-orange-50 transition-colors group"
+                    className="flex items-center space-x-2 hover:bg-blue-50 transition-colors group"
                   >
-                    <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center">
+                    <div className="w-8 h-8 gradient-primary rounded-full flex items-center justify-center">
                       <User className="h-4 w-4 text-white" />
                     </div>
                   </Button>
                   {user?.role === 'premium' && (
-                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full border-2 border-white"></div>
+                    <div className="absolute -top-1 -right-1 w-3 h-3 gradient-accent rounded-full border-2 border-white"></div>
                   )}
                 </div>
               </div>
             ) : (
-              <Button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-6 shadow-lg hover:shadow-xl transition-all duration-200">
+              <Button className="gradient-primary text-white px-6 shadow-lg hover:shadow-xl transition-all duration-200">
                 Se connecter
               </Button>
             )}
