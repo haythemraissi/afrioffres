@@ -84,13 +84,13 @@ const Chatbot = () => {
         <ScrollArea className="flex-1 p-4">
           {messages.length === 0 ? (
             <div className="space-y-4">
-              <div className="flex items-center space-x-2 text-gray-600">
+              <div className="flex items-center space-x-2 text-muted-foreground">
                 <HelpCircle className="h-5 w-5" />
                 <span className="text-sm">Comment puis-je vous aider ?</span>
               </div>
               
               <div className="space-y-2">
-                <p className="text-xs text-gray-500">Questions fréquentes :</p>
+                <p className="text-xs text-muted-foreground">Questions fréquentes :</p>
                 {quickQuestions.map((question, index) => (
                   <Button
                     key={index}
