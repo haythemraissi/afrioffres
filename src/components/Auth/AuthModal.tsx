@@ -35,15 +35,15 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       email: formData.email,
       role: 'premium' as const,
       preferences: {
-        countries: ['Côte d\'Ivoire', 'Sénégal'],
-        types: ['booking', 'travel'],
+        countries: ['Tunisie', 'Maroc', 'Algérie'],
+        types: ['hotel', 'competitive_analysis'],
         notifications: {
           email: true,
           whatsapp: false,
           realTime: true,
         }
       },
-      keywords: ['booking', 'travel', 'tourism']
+      keywords: ['hotel', 'pricing', 'competitive_intelligence']
     };
 
     login(mockUser);
@@ -58,10 +58,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
-            #AfriOffres
+          <CardTitle className="text-2xl text-gradient">
+            Medina Intelligence
           </CardTitle>
-          <p className="text-gray-600">Accédez à votre compte</p>
+          <p className="text-muted-foreground">Plateforme d'intelligence compétitive hôtelière</p>
         </CardHeader>
 
         <CardContent>
@@ -114,7 +114,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
                 <Button 
                   type="submit"
-                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                  className="w-full gradient-primary hover:shadow-competitive"
                 >
                   Se connecter
                 </Button>
@@ -180,7 +180,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
                 <Button 
                   type="submit"
-                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                  className="w-full gradient-primary hover:shadow-competitive"
                 >
                   S'inscrire
                 </Button>

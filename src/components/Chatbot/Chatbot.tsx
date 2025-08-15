@@ -13,10 +13,10 @@ const Chatbot = () => {
   const [currentMessage, setCurrentMessage] = useState('');
 
   const quickQuestions = [
-    "Comment soumettre une offre ?",
-    "Quels documents sont requis ?",
-    "Comment créer un compte premium ?",
-    "Aide pour les filtres de recherche"
+    "Quels sont les prix des hôtels concurrents ?",
+    "Comment analyser les tendances tarifaires ?",
+    "Quelle est la stratégie de pricing optimale ?",
+    "Aide pour les comparaisons d'hôtels"
   ];
 
   const handleSendMessage = () => {
@@ -34,10 +34,10 @@ const Chatbot = () => {
     // Simulate bot response
     setTimeout(() => {
       const botResponses = [
-        "Pour soumettre une offre, vous devez d'abord vous inscrire sur la plateforme, puis consulter les détails de l'appel d'offres qui vous intéresse.",
-        "Les documents généralement requis incluent : certificat d'entreprise, références, situation fiscale, et proposition technique détaillée.",
-        "Je peux vous aider avec cette question. Avez-vous consulté notre section d'aide dans les paramètres ?",
-        "Pour plus d'informations détaillées, je vous recommande de contacter notre équipe support."
+        "Je peux vous aider à analyser les prix des hôtels concurrents. Consultez l'onglet 'Comparaison Hôtels' pour voir les dernières données.",
+        "L'analyse des tendances tarifaires est disponible dans le tableau de bord. Je peux vous guider vers les métriques les plus pertinentes.",
+        "Pour optimiser votre stratégie de pricing, je recommande d'analyser les données historiques et les pics de demande saisonniers.",
+        "Pour une analyse plus détaillée, explorez les filtres de recherche et les graphiques comparatifs disponibles sur la plateforme."
       ];
 
       const botMessage = {
@@ -58,7 +58,7 @@ const Chatbot = () => {
   if (!chatbotOpen) {
     return (
       <Button
-        className="fixed bottom-6 right-6 h-14 w-14 rounded-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 shadow-lg z-50"
+        className="fixed bottom-6 right-6 h-14 w-14 rounded-full gradient-primary hover:shadow-competitive shadow-lg z-50"
         onClick={() => setChatbotOpen(true)}
       >
         <MessageCircle className="h-6 w-6" />
@@ -68,8 +68,8 @@ const Chatbot = () => {
 
   return (
     <Card className="fixed bottom-6 right-6 w-80 h-96 shadow-xl z-50 flex flex-col">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-t-lg">
-        <CardTitle className="text-sm font-medium">Assistant #AfriOffres</CardTitle>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 gradient-primary text-white rounded-t-lg">
+        <CardTitle className="text-sm font-medium">Assistant Medina Intelligence</CardTitle>
         <Button
           variant="ghost"
           size="sm"
@@ -114,8 +114,8 @@ const Chatbot = () => {
                   <div
                     className={`max-w-[80%] px-3 py-2 rounded-lg text-sm ${
                       msg.sender === 'user'
-                        ? 'bg-orange-500 text-white'
-                        : 'bg-gray-100 text-gray-900'
+                        ? 'gradient-primary text-white'
+                        : 'bg-muted text-foreground'
                     }`}
                   >
                     {msg.message}
@@ -139,7 +139,7 @@ const Chatbot = () => {
               size="sm"
               onClick={handleSendMessage}
               disabled={!currentMessage.trim()}
-              className="bg-orange-500 hover:bg-orange-600"
+              className="gradient-primary hover:shadow-competitive"
             >
               <Send className="h-4 w-4" />
             </Button>
