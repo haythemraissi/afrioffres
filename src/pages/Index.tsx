@@ -9,6 +9,7 @@ import SearchFilters from '../components/Competitors/SearchFilters';
 import HotelCard from '../components/Hotels/HotelCard';
 import HotelSearchFilters from '../components/Hotels/HotelSearchFilters';
 import RecommendationsSection from '../components/Dashboard/RecommendationsSection';
+import HotelRecommendationsSection from '../components/Hotels/HotelRecommendationsSection';
 import AIAssistant from '../components/AIAssistant/AIAssistant';
 import Chatbot from '../components/Chatbot/Chatbot';
 import AuthModal from '../components/Auth/AuthModal';
@@ -440,6 +441,7 @@ const Index = () => {
             <div className="flex items-center justify-between">
               <h2 className="text-3xl font-bold text-gray-900">Comparaison d'hôtels</h2>
             </div>
+            <HotelRecommendationsSection />
             <HotelSearchFilters />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredHotels.map((hotel) => (
