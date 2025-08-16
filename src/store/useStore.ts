@@ -96,7 +96,7 @@ interface StoreState {
   user: User | null;
   isAuthenticated: boolean;
   
-  // Competitive Intelligence state
+  // Market Intelligence state
   competitors: CompetitorData[];
   filteredCompetitors: CompetitorData[];
   searchQuery: string;

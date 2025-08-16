@@ -41,7 +41,7 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel }) => {
       case 'café':
         return <Coffee className="h-4 w-4" />;
       default:
-        return <div className="h-4 w-4 bg-competitive rounded-full" />;
+        return <div className="h-4 w-4 bg-primary rounded-full" />;
     }
   };
 
@@ -59,7 +59,7 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel }) => {
   };
 
   return (
-    <Card className="hover:shadow-competitive transition-all duration-300 border-l-4 border-l-competitive">
+    <Card className="hover:shadow-competitive transition-all duration-300 border-l-4 border-l-primary">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div>
@@ -70,7 +70,7 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel }) => {
               <div className="flex items-center">
                 {renderStars(stars)}
               </div>
-              <Badge className="bg-competitive-light text-competitive-dark">
+              <Badge className="bg-primary/10 text-primary">
                 {stars} étoiles
               </Badge>
               {availability ? (
@@ -93,7 +93,7 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel }) => {
 
       <CardContent className="space-y-4">
         {/* Image placeholder */}
-        <div className="w-full h-48 bg-gradient-to-br from-competitive to-competitive-dark rounded-lg flex items-center justify-center">
+        <div className="w-full h-48 gradient-primary rounded-lg flex items-center justify-center">
           <span className="text-white text-sm">Image d'hôtel</span>
         </div>
 
@@ -101,9 +101,9 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel }) => {
         <p className="text-gray-600 text-sm line-clamp-3">{description}</p>
 
         {/* Price */}
-        <div className="bg-competitive-light rounded-lg p-3">
-          <div className="text-xs text-competitive-dark uppercase tracking-wide mb-1">Prix par nuit</div>
-          <div className="text-2xl font-bold text-competitive">
+        <div className="bg-primary/10 rounded-lg p-3">
+          <div className="text-xs text-primary uppercase tracking-wide mb-1">Prix par nuit</div>
+          <div className="text-2xl font-bold text-primary">
             {pricePerNight} {currency}
           </div>
         </div>
@@ -184,7 +184,7 @@ const HotelCard: React.FC<HotelCardProps> = ({ hotel }) => {
           <Button variant="outline" size="sm">
             Voir détails
           </Button>
-          <Button className="gradient-competitive text-white" size="sm">
+          <Button className="gradient-primary text-white" size="sm">
             Comparer
           </Button>
         </div>

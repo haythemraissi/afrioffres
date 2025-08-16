@@ -36,14 +36,14 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       role: 'premium' as const,
       preferences: {
         countries: ['Tunisie', 'Maroc', 'Algérie'],
-        types: ['hotel', 'competitive_analysis'],
+        types: ['hotel', 'analysis'],
         notifications: {
           email: true,
           whatsapp: false,
           realTime: true,
         }
       },
-      keywords: ['hotel', 'pricing', 'competitive_intelligence']
+      keywords: ['hotel', 'pricing', 'analysis']
     };
 
     login(mockUser);

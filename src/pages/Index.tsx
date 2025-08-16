@@ -296,11 +296,11 @@ const Index = () => {
           <div className="space-y-6">
             {/* Header */}
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-competitive via-red-500 to-pink-500 bg-clip-text text-transparent mb-4">
-                Dashboard - Intelligence Concurrentielle Hôtelière
+              <h1 className="text-4xl font-bold text-gradient mb-4">
+                Dashboard - Intelligence Hôtelière Medina
               </h1>
-              <p className="text-gray-600 text-lg max-w-3xl mx-auto">
-                Surveillez vos concurrents hôteliers et comparez les prix en temps réel
+              <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
+                Surveillez le marché hôtelier tunisien et comparez les prix en temps réel
               </p>
             </div>
 
@@ -316,44 +316,44 @@ const Index = () => {
                 
                 {/* Stats Cards for Hotels */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                  <Card className="border-l-4 border-l-competitive">
+                  <Card className="border-l-4 border-l-primary">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium text-gray-600">Total Hôtels</CardTitle>
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Total Hôtels</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold text-gray-900">{hotels.length}</div>
-                      <p className="text-xs text-gray-500 mt-1">Dans la base</p>
+                      <div className="text-2xl font-bold text-foreground">{hotels.length}</div>
+                      <p className="text-xs text-muted-foreground mt-1">Dans la base</p>
                     </CardContent>
                   </Card>
                   <Card className="border-l-4 border-l-green-500">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium text-gray-600">Disponibles</CardTitle>
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Disponibles</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold text-gray-900">{hotels.filter(h => h.availability).length}</div>
-                      <p className="text-xs text-gray-500 mt-1">Réservables</p>
+                      <div className="text-2xl font-bold text-foreground">{hotels.filter(h => h.availability).length}</div>
+                      <p className="text-xs text-muted-foreground mt-1">Réservables</p>
                     </CardContent>
                   </Card>
                   <Card className="border-l-4 border-l-yellow-500">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium text-gray-600">Prix Moyen</CardTitle>
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Prix Moyen</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold text-gray-900">
+                      <div className="text-2xl font-bold text-foreground">
                         {Math.round(hotels.reduce((acc, h) => acc + h.pricePerNight, 0) / hotels.length || 0)} TND
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">Par nuit</p>
+                      <p className="text-xs text-muted-foreground mt-1">Par nuit</p>
                     </CardContent>
                   </Card>
                   <Card className="border-l-4 border-l-blue-500">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium text-gray-600">Note Moyenne</CardTitle>
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Note Moyenne</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold text-gray-900">
+                      <div className="text-2xl font-bold text-foreground">
                         {(hotels.reduce((acc, h) => acc + h.reviews.rating, 0) / hotels.length || 0).toFixed(1)}
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">Sur 5 étoiles</p>
+                      <p className="text-xs text-muted-foreground mt-1">Sur 5 étoiles</p>
                     </CardContent>
                   </Card>
                 </div>
@@ -370,40 +370,40 @@ const Index = () => {
                 
                 {/* Stats Cards for Competitors */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                  <Card className="border-l-4 border-l-competitive">
+                  <Card className="border-l-4 border-l-primary">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium text-gray-600">Total Concurrents</CardTitle>
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Total Concurrents</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold text-gray-900">{competitors.length}</div>
-                      <p className="text-xs text-gray-500 mt-1">Surveillés activement</p>
+                      <div className="text-2xl font-bold text-foreground">{competitors.length}</div>
+                      <p className="text-xs text-muted-foreground mt-1">Surveillés activement</p>
                     </CardContent>
                   </Card>
                   <Card className="border-l-4 border-l-green-500">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium text-gray-600">Concurrents Actifs</CardTitle>
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Concurrents Actifs</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold text-gray-900">{competitors.filter(c => c.status === 'active').length}</div>
-                      <p className="text-xs text-gray-500 mt-1">En temps réel</p>
+                      <div className="text-2xl font-bold text-foreground">{competitors.filter(c => c.status === 'active').length}</div>
+                      <p className="text-xs text-muted-foreground mt-1">En temps réel</p>
                     </CardContent>
                   </Card>
                   <Card className="border-l-4 border-l-yellow-500">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium text-gray-600">Changements Prix</CardTitle>
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Changements Prix</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold text-gray-900">24</div>
-                      <p className="text-xs text-gray-500 mt-1">Dernières 24h</p>
+                      <div className="text-2xl font-bold text-foreground">24</div>
+                      <p className="text-xs text-muted-foreground mt-1">Dernières 24h</p>
                     </CardContent>
                   </Card>
                   <Card className="border-l-4 border-l-blue-500">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium text-gray-600">Alertes Actives</CardTitle>
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Alertes Actives</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold text-gray-900">7</div>
-                      <p className="text-xs text-gray-500 mt-1">Nécessitent action</p>
+                      <div className="text-2xl font-bold text-foreground">7</div>
+                      <p className="text-xs text-muted-foreground mt-1">Nécessitent action</p>
                     </CardContent>
                   </Card>
                 </div>
@@ -424,7 +424,7 @@ const Index = () => {
         return (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-3xl font-bold text-gray-900">Analyses concurrentielles</h2>
+              <h2 className="text-3xl font-bold text-foreground">Analyses concurrentielles</h2>
             </div>
             <SearchFilters />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -439,7 +439,7 @@ const Index = () => {
         return (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-3xl font-bold text-gray-900">Comparaison d'hôtels</h2>
+              <h2 className="text-3xl font-bold text-foreground">Comparaison d'hôtels</h2>
             </div>
             <HotelRecommendationsSection />
             <HotelSearchFilters />
@@ -457,9 +457,9 @@ const Index = () => {
       case 'notifications':
         return (
           <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-gray-900">Alertes et notifications</h2>
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <p className="text-gray-600">Gestion des alertes en temps réel pour les changements concurrentiels</p>
+            <h2 className="text-3xl font-bold text-foreground">Alertes et notifications</h2>
+            <div className="bg-card rounded-lg shadow-sm p-6">
+              <p className="text-muted-foreground">Gestion des alertes en temps réel pour les changements concurrentiels</p>
             </div>
           </div>
         );
@@ -467,9 +467,9 @@ const Index = () => {
       case 'analytics':
         return (
           <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-gray-900">Statistiques et analyses</h2>
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <p className="text-gray-600">Graphiques et analyses détaillées de la concurrence</p>
+            <h2 className="text-3xl font-bold text-foreground">Statistiques et analyses</h2>
+            <div className="bg-card rounded-lg shadow-sm p-6">
+              <p className="text-muted-foreground">Graphiques et analyses détaillées du marché hôtelier</p>
             </div>
           </div>
         );
@@ -477,9 +477,9 @@ const Index = () => {
       case 'settings':
         return (
           <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-gray-900">Paramètres</h2>
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <p className="text-gray-600">Configuration de la plateforme</p>
+            <h2 className="text-3xl font-bold text-foreground">Paramètres</h2>
+            <div className="bg-card rounded-lg shadow-sm p-6">
+              <p className="text-muted-foreground">Configuration de la plateforme Medina</p>
             </div>
           </div>
         );
@@ -487,7 +487,7 @@ const Index = () => {
       default:
         return (
           <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-gray-900">Tableau de bord</h2>
+            <h2 className="text-3xl font-bold text-foreground">Tableau de bord</h2>
             <RecommendationsSection />
           </div>
         );
@@ -495,7 +495,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header />
       <div className="flex">
         <Sidebar />
